@@ -28,14 +28,13 @@ public class CinemaController {
                                    @RequestParam(name = "movieId", required = false) Long movieId,
                                    @RequestParam(name = "halls", required = false) Integer halls,
                                    @RequestParam(name = "page", required = false) Integer page,
-                                   @RequestParam(name = "size", required = false) Integer size
-    ) {
+                                   @RequestParam(name = "size", required = false) Integer size) {
 
         // Create default pagination
-        if(page == null){
+        if(page == null) {
             page = 0; // first page is actually 0
         }
-        if(size == null){
+        if(size == null) {
             size = 10; //default page size = 10
         }
         Pageable pageable = PageRequest.of(page, size);
