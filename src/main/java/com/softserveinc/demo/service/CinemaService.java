@@ -10,8 +10,7 @@ import java.util.Optional;
 
 public interface CinemaService {
     List<Cinema> getAllCinemas();
-    List<Cinema> findAllByNameAndHallsAndIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
-    List<Cinema> findAllByNameOrHallsOrIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
+    List<Cinema> findAllByNameOrHallsOrIsOpenOrMovies_Id(String name, Integer halls, Boolean isOpen,Long movieId, Pageable pageable);
 
     Cinema getById(Long id);
     Optional<Cinema> findById(Long id);

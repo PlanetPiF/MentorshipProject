@@ -15,11 +15,12 @@ import java.util.*;
 @RestController
 public class CinemaController {
 
-    @Autowired
     private CinemaService cinemaService;
 
     @Autowired
-    private MovieService movieService;
+    public CinemaController(CinemaService cinemaService) {
+        this.cinemaService = cinemaService;
+    }
 
     @GetMapping(value = "/cinemas")
     public List<Cinema> getCinemas(@RequestParam(name = "name", required = false) String name,
@@ -43,8 +44,8 @@ public class CinemaController {
         if (name == null && isOpen == null && movieId == null && halls == null) {
             return cinemaService.getAllCinemas();
         }
-        
-        return cinemaService.findAllByNameOrHallsOrIsOpen(name,halls,isOpen,pageable);
+
+        return cinemaService.findAllByNameOrHallsOrIsOpenOrMovies_Id(name,halls,isOpen,movieId,pageable);
     }
 
     @GetMapping("/cinemas/{id}")

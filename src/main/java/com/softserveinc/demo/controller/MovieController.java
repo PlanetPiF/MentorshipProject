@@ -14,9 +14,13 @@ import java.util.List;
 
 @RestController
 public class MovieController {
+    
+    private MovieService movieService;
 
     @Autowired
-    private MovieService movieService;
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     @GetMapping("/movies")
     public List<Movie> getMovies() {

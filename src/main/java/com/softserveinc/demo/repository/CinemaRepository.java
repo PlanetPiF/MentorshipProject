@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Long> {
 
-    List<Cinema> findAllByNameAndHallsAndIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
-    List<Cinema> findAllByNameOrHallsOrIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
+    List<Cinema> findAllByNameOrHallsOrIsOpenOrMovies_Id(String name, Integer halls, Boolean isOpen, Long id, Pageable pageable);
 
 }
