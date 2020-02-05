@@ -2,7 +2,6 @@ package com.softserveinc.demo.controller;
 
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.service.CinemaService;
-import com.softserveinc.demo.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,10 +40,10 @@ public class CinemaController {
 
         // Return all movies if there are no filters
         if (name == null && isOpen == null && movieId == null && halls == null) {
-            return cinemaService.getAllCinemas();
+            return cinemaService.findAllCinemas();
         }
 
-        return cinemaService.findAllByNameOrHallsOrIsOpenOrMovies_Id(name,halls,isOpen,movieId,pageable);
+        return cinemaService.findCinemasBy(name,halls,isOpen,movieId,pageable);
     }
 
     @GetMapping("/cinemas/{id}")

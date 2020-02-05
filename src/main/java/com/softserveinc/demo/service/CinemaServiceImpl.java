@@ -27,12 +27,12 @@ public class CinemaServiceImpl implements CinemaService{
     }
 
     @Override
-    public List<Cinema> getAllCinemas() {
+    public List<Cinema> findAllCinemas() {
         return (List<Cinema>) cinemaRepository.findAll();
     }
 
     @Override
-    public List<Cinema> findAllByNameOrHallsOrIsOpenOrMovies_Id(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
+    public List<Cinema> findCinemasBy(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
         return cinemaRepository.findAllByNameOrHallsOrIsOpenOrMovies_Id(name, halls, isOpen, movieId, pageable);
     }
 
