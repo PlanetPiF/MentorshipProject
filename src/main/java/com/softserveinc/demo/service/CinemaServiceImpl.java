@@ -4,6 +4,7 @@ import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.model.Movie;
 import com.softserveinc.demo.repository.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,31 +29,18 @@ public class CinemaServiceImpl implements CinemaService{
     }
 
     @Override
-    public Cinema getByName(String name) {
-        return cinemaRepository.getByName(name);
-    }
-
-    @Override
     public List<Cinema> getAllCinemas() {
         return (List<Cinema>) cinemaRepository.findAll();
     }
 
     @Override
-    public List<Cinema> getOpenCinemas() {
-        List<Cinema> results = (List<Cinema>) cinemaRepository.findAll();
-        return results.stream().filter(Cinema::isOpen).collect(Collectors.toList());
+    public List<Cinema> findAllByNameAndHallsAndIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable) {
+        return cinemaRepository.findAllByNameAndHallsAndIsOpen(name, halls, isOpen,pageable);
     }
 
     @Override
-    public List<Cinema> getClosedCinemas() {
-        List<Cinema> results = (List<Cinema>) cinemaRepository.findAll();
-        return results.stream().filter(cinema -> !cinema.isOpen()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Cinema> getByMovie(Movie movie) {
-        List<Cinema> results = (List<Cinema>) cinemaRepository.findAll();
-        return results.stream().filter(cinema -> cinema.getMovies().contains(movie)).collect(Collectors.toList());
+    public List<Cinema> findAllByNameOrHallsOrIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable) {
+        return cinemaRepository.findAllByNameOrHallsOrIsOpen(name, halls, isOpen, pageable);
     }
 
     @Override

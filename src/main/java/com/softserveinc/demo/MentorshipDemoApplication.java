@@ -4,13 +4,11 @@ import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.model.Movie;
 import com.softserveinc.demo.repository.CinemaRepository;
 import com.softserveinc.demo.repository.MovieRepository;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +40,11 @@ public class MentorshipDemoApplication implements CommandLineRunner {
 		moviesList.add(movieRepository.save(lotr));
 		moviesList.add(movieRepository.save(garfield));
 
-		Cinema cinemaOne = cinemaRepository.save(new Cinema("Arena", Boolean.TRUE, 10));
-		Cinema cinemaTwo = cinemaRepository.save(new Cinema("IMAX", Boolean.FALSE, 5));
+		Cinema cinemaOne = cinemaRepository.save(new Cinema("Arena", Boolean.TRUE, 10, "Address4"));
+		Cinema cinemaOne1 = cinemaRepository.save(new Cinema("Arena", Boolean.TRUE, 20, "Address5"));
+		Cinema cinemaOne2 = cinemaRepository.save(new Cinema("Arena", Boolean.TRUE, 30, "Address6"));
+		Cinema cinemaOne3 = cinemaRepository.save(new Cinema("Arena", Boolean.TRUE, 40, "Address7"));
+		Cinema cinemaTwo = cinemaRepository.save(new Cinema("IMAX", Boolean.FALSE, 5, "Address8"));
 
 		cinemaOne.getMovies().add(harryPotter);
 		cinemaTwo.getMovies().addAll(moviesList);

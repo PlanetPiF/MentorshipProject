@@ -13,24 +13,21 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-public class MovieRESTController {
-
-    @Autowired
-    private MovieRepository movieRepository;
+public class MovieController {
 
     @Autowired
     private MovieService movieService;
 
     @GetMapping("/movies")
     public List<Movie> getMovies() {
-        return (List<Movie>) movieRepository.findAll();
+        return movieService.findAllMovies();
     }
 
     @GetMapping("/movies/{id}")
     Movie getMovieById(@PathVariable
                        @Min(value = 1, message = "id must be greater than or equal to 1")
                        @Max(value = 1000, message = "id must be lower than or equal to 1000") Long id) {
-        return movieRepository.findById(id).orElse(null);
+        return movieService.getById(id);
     }
 
     // POST/PUT/DELETE not needed currently, implemented for CinemaController
