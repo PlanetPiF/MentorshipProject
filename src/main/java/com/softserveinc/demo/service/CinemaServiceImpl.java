@@ -12,9 +12,14 @@ import java.util.Optional;
 @Service
 public class CinemaServiceImpl implements CinemaService{
 
-    @Autowired
     private CinemaRepository cinemaRepository;
 
+    public CinemaServiceImpl () {}
+
+    @Autowired
+    public CinemaServiceImpl(CinemaRepository cinemaRepository) {
+        this.cinemaRepository = cinemaRepository;
+    }
 
     @Override
     public Cinema getById(Long id) {
