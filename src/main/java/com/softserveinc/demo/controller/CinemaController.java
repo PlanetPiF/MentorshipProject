@@ -1,63 +1,49 @@
 package com.softserveinc.demo.controller;
 
 import com.softserveinc.demo.model.Cinema;
-import com.softserveinc.demo.model.Movie;
 import com.softserveinc.demo.service.CinemaService;
-import com.softserveinc.demo.service.MovieService;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
-public class CinemaRESTController {
+public class CinemaController {
 
-    @Autowired
     private CinemaService cinemaService;
 
     @Autowired
-    private MovieService movieService;
+    public CinemaController(CinemaService cinemaService) {
+        this.cinemaService = cinemaService;
+    }
 
     @GetMapping(value = "/cinemas")
     public List<Cinema> getCinemas(@RequestParam(name = "name", required = false) String name,
                                    @RequestParam(name = "isOpen", required = false) Boolean isOpen,
-                                   @RequestParam(name = "movieId", required = false) Long movieId
-    ) {
+                                   @RequestParam(name = "movieId", required = false) Long movieId,
+                                   @RequestParam(name = "halls", required = false) Integer halls,
+                                   @RequestParam(name = "page", required = false) Integer page,
+                                   @RequestParam(name = "size", required = false) Integer size) {
 
-        if (name == null && isOpen == null && movieId == null) {
-            return cinemaService.getAllCinemas();
-        } else {
-            Set<Cinema> set = new HashSet<>();
+        // Create default pagination
+        if(page == null) {
+            page = 0; // first page is actually 0
+        }
+        if(size == null) {
+            size = 10; //default page size = 10
+        }
+        Pageable pageable = PageRequest.of(page, size);
 
-            // Search for cinemas playing a specific movie
-            if (movieId != null) {
-                Movie movie = movieService.getById(movieId);
-                set.addAll(cinemaService.getByMovie(movie));
-            }
-
-            // Search cinema by name
-            if (Strings.isNotBlank(name)) {
-                set.add(cinemaService.getByName(name));
-            }
-
-            // Search only for open cinemas
-            if (isOpen != null) {
-                if (isOpen) {
-                    set.addAll(cinemaService.getOpenCinemas());
-                } else {
-                    set.addAll(cinemaService.getClosedCinemas());
-                }
-            }
-
-            return new ArrayList<>(set);
+        // Return all movies if there are no filters
+        if (name == null && isOpen == null && movieId == null && halls == null) {
+            return cinemaService.findAllCinemas();
         }
 
+        return cinemaService.findCinemasBy(name,halls,isOpen,movieId,pageable);
     }
 
     @GetMapping("/cinemas/{id}")

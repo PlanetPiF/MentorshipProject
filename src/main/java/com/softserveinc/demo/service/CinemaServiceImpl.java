@@ -1,21 +1,25 @@
 package com.softserveinc.demo.service;
 
 import com.softserveinc.demo.model.Cinema;
-import com.softserveinc.demo.model.Movie;
 import com.softserveinc.demo.repository.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CinemaServiceImpl implements CinemaService{
 
-    @Autowired
     private CinemaRepository cinemaRepository;
 
+    public CinemaServiceImpl () {}
+
+    @Autowired
+    public CinemaServiceImpl(CinemaRepository cinemaRepository) {
+        this.cinemaRepository = cinemaRepository;
+    }
 
     @Override
     public Cinema getById(Long id) {
@@ -28,31 +32,13 @@ public class CinemaServiceImpl implements CinemaService{
     }
 
     @Override
-    public Cinema getByName(String name) {
-        return cinemaRepository.getByName(name);
-    }
-
-    @Override
-    public List<Cinema> getAllCinemas() {
+    public List<Cinema> findAllCinemas() {
         return (List<Cinema>) cinemaRepository.findAll();
     }
 
     @Override
-    public List<Cinema> getOpenCinemas() {
-        List<Cinema> results = (List<Cinema>) cinemaRepository.findAll();
-        return results.stream().filter(Cinema::isOpen).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Cinema> getClosedCinemas() {
-        List<Cinema> results = (List<Cinema>) cinemaRepository.findAll();
-        return results.stream().filter(cinema -> !cinema.isOpen()).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Cinema> getByMovie(Movie movie) {
-        List<Cinema> results = (List<Cinema>) cinemaRepository.findAll();
-        return results.stream().filter(cinema -> cinema.getMovies().contains(movie)).collect(Collectors.toList());
+    public List<Cinema> findCinemasBy(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
+        return cinemaRepository.findAllByNameOrHallsOrIsOpenOrMovies_Id(name, halls, isOpen, movieId, pageable);
     }
 
     @Override

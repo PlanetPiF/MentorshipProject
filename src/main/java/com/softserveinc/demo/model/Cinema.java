@@ -7,11 +7,12 @@ import java.util.List;
 @Entity
 public class Cinema {
 
-    public Cinema(String name, boolean isOpen, int numberOfHalls) {
+    public Cinema(String name, boolean isOpen, int halls, String address) {
         this.name = name;
         this.isOpen = isOpen;
-        this.numberOfHalls = numberOfHalls;
+        this.halls = halls;
         this.movies = new ArrayList<Movie>();
+        this.address = address;
     }
 
     public Cinema() {
@@ -22,7 +23,8 @@ public class Cinema {
     private long id;
     private String name;
     private boolean isOpen;
-    private int numberOfHalls;
+    private int halls;
+    private String address;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -54,12 +56,12 @@ public class Cinema {
         isOpen = open;
     }
 
-    public int getNumberOfHalls() {
-        return numberOfHalls;
+    public int getHalls() {
+        return halls;
     }
 
-    public void setNumberOfHalls(int numberOfHalls) {
-        this.numberOfHalls = numberOfHalls;
+    public void setHalls(int halls) {
+        this.halls = halls;
     }
 
     public List<Movie> getMovies() {
@@ -68,5 +70,13 @@ public class Cinema {
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
