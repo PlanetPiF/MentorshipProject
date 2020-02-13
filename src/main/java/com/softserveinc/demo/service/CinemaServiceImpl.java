@@ -1,11 +1,10 @@
 package com.softserveinc.demo.service;
 
-import com.softserveinc.demo.exception.CinemaNotFoundException;
+import com.softserveinc.demo.exception.EntityNotFoundException;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.repository.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class CinemaServiceImpl implements CinemaService{
 
     @Override
     public Cinema getById(Long id) {
-        return cinemaRepository.findById(id).orElseThrow(() -> new CinemaNotFoundException(HttpStatus.NOT_FOUND, "Cinema not found with id: " + id));
+        return cinemaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
