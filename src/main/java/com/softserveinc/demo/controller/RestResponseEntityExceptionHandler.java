@@ -15,15 +15,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(EntityNotFoundException ex, WebRequest request) {
-
-        String bodyOfResponse = "404: Resource not found.";
+        String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = BadRequestException.class)
     protected ResponseEntity<Object> handleBadArguments(BadRequestException ex, WebRequest request) {
-
-        String bodyOfResponse = "400: Bad request.";
+        String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 

@@ -24,7 +24,7 @@ public class CinemaServiceImpl implements CinemaService{
 
     @Override
     public Cinema getById(Long id) {
-        return cinemaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return cinemaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cinema not found"));
     }
 
     @Override

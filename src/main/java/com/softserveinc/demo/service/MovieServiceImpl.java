@@ -17,7 +17,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie getById(Long id) {
         return movieRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found"));
     }
 
     @Override
