@@ -4,8 +4,6 @@ import com.softserveinc.demo.exception.EntityNotFoundException;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.model.Movie;
 import com.softserveinc.demo.service.CinemaService;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -52,8 +51,8 @@ public class CinemaControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/cinemas/4")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name" , Matchers.is("Arena")))
-                .andExpect(jsonPath("$.*", Matchers.hasSize(6)))
+                .andExpect(jsonPath("$.name" , is("Arena")))
+                .andExpect(jsonPath("$.*", hasSize(6)))
                 .andReturn();
     }
 
@@ -83,7 +82,7 @@ public class CinemaControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/cinemas")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.*", hasSize(2)))
                 .andExpect(jsonPath("$.[0].name", is("Arena")))
                 .andExpect(jsonPath("$.[0].movies[0].title", is("Lord of the Rings")))
                 .andExpect(jsonPath("$.[1].name", is("IMAX")))
