@@ -80,7 +80,7 @@ public class CinemaControllerTest {
 
         when(cinemaService.findAllCinemas()).thenReturn(cinemasList);
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/cinemas")
+        mockMvc.perform(MockMvcRequestBuilders.get("/cinemas")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", Matchers.hasSize(2)))
