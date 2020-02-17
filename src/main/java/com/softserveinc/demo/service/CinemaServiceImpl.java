@@ -1,5 +1,6 @@
 package com.softserveinc.demo.service;
 
+import com.softserveinc.demo.exception.EntityNotFoundException;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.repository.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class CinemaServiceImpl implements CinemaService{
 
     @Override
     public Cinema getById(Long id) {
-        return cinemaRepository.findById(id).orElse(null);
+        return cinemaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cinema not found"));
     }
 
     @Override
