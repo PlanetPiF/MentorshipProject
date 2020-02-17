@@ -5,11 +5,12 @@ import com.softserveinc.demo.service.CinemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.*;
+import java.util.List;
 
 @RestController
 public class CinemaController {
@@ -21,7 +22,7 @@ public class CinemaController {
         this.cinemaService = cinemaService;
     }
 
-    @GetMapping(value = "/cinemas")
+    @GetMapping(value = "/cinemas", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Cinema> getCinemas(@RequestParam(name = "name", required = false) String name,
                                    @RequestParam(name = "isOpen", required = false) Boolean isOpen,
                                    @RequestParam(name = "movieId", required = false) Long movieId,
@@ -46,7 +47,7 @@ public class CinemaController {
         return cinemaService.findCinemasBy(name,halls,isOpen,movieId,pageable);
     }
 
-    @GetMapping("/cinemas/{id}")
+    @GetMapping(value = "/cinemas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     Cinema getCinemaById(@PathVariable
                          @Min(value = 1, message = "id must be greater than or equal to 1")
                          @Max(value = 1000, message = "id must be lower than or equal to 1000") Long id) {
