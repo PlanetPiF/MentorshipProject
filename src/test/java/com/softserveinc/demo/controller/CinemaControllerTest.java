@@ -88,9 +88,6 @@ public class CinemaControllerTest {
                 .andExpect(jsonPath("$.[0].movies[0].title", is("Lord of the Rings")))
                 .andExpect(jsonPath("$.[1].name", is("IMAX")))
                 .andReturn();
-
-        String JSON = mvcResult.getResponse().getContentAsString();
-        Assert.assertTrue(JSON.contains("Arena"));
     }
 
 }
