@@ -54,7 +54,8 @@ public class CinemaController {
         return cinemaService.getById(id);
     }
 
-    @PostMapping("/cinemas")
+    @PostMapping(value = "/cinemas",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     Cinema createOrSaveCinema(@RequestBody Cinema newCinema) {
         return cinemaService.save(newCinema);
     }
@@ -64,7 +65,7 @@ public class CinemaController {
         cinemaService.deleteById(id);
     }
 
-    @PutMapping("/employees/{id}")
+    @PutMapping(value = "/cinemas/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     Cinema updateCinema(@RequestBody Cinema newCinema, @PathVariable Long id) {
         return cinemaService.findById(id).map(cinema -> {
             cinema.setName(newCinema.getName());

@@ -26,10 +26,7 @@ public class Cinema {
     private int halls;
     private String address;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Movie> movies;
 
     public long getId() {

@@ -1,5 +1,6 @@
 package com.softserveinc.demo.controller;
 
+import com.google.gson.Gson;
 import com.softserveinc.demo.exception.EntityNotFoundException;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.model.Movie;
@@ -18,11 +19,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,6 +89,48 @@ public class CinemaControllerTest {
                 .andExpect(jsonPath("$.[0].movies[0].title", is("Lord of the Rings")))
                 .andExpect(jsonPath("$.[1].name", is("IMAX")))
                 .andReturn();
+    }
+
+    @Test
+    public void testPutCinema() throws Exception {
+        Cinema cinema = new Cinema("Cinema555", Boolean.TRUE, 10, "Address555");
+        cinema.setId(555L);
+        Optional<Cinema> optionalCinema = Optional.of(cinema);
+
+        when(cinemaService.findById(555L)).thenReturn(optionalCinema);
+        when(cinemaService.save(cinema)).thenReturn(cinema);
+
+        Gson gson = new Gson();
+        String gsonString = gson.toJson(cinema);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/cinemas/555")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(gsonString))
+                .andExpect(status().isOk());
+
+        verify(cinemaService, times(1)).findById(anyLong());
+        verify(cinemaService, times(1)).save(cinema);
+    }
+
+    @Test
+    public void testDeleteCinema() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/cinemas/123"))
+                .andExpect(status().isOk());
+        verify(cinemaService, only()).deleteById(123L);
+    }
+
+    @Test
+    public void testSaveCinema() throws Exception {
+        Cinema cinema = new Cinema("Cinegrand", Boolean.TRUE, 1000, "Nearby Mall");
+        String cinemaGsonString = new Gson().toJson(cinema);
+        when(cinemaService.save(any(Cinema.class))).thenReturn(cinema);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/cinemas")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(cinemaGsonString))
+                .andExpect(status().isOk());
+
+        verify(cinemaService, times(1)).save(any(Cinema.class));
     }
 
 }
