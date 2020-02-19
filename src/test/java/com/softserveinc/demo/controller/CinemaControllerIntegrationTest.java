@@ -33,9 +33,6 @@ public class CinemaControllerIntegrationTest {
 
         JSONAssert.assertEquals(cinema5, result, false);
     }
-    private String createURLWithPort(String url) {
-        return "http://localhost:" + port + url;
-    }
 
     @Test
     public void testPostCinema() throws Exception {
@@ -55,5 +52,8 @@ public class CinemaControllerIntegrationTest {
         //TODO assert
     }
 
+    private String createURLWithPort(String url) {
+        return "http://localhost:" + port + url;
+    }
 }
 
