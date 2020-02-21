@@ -97,18 +97,23 @@ public class CinemaControllerIntegrationTest {
     }
 
     @Test
-    public void testDeleteCinema() {
+    public void testDeleteExistingCinema() {
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
         // Try successful delete on existing ID
         ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/cinemas/4"), HttpMethod.DELETE, entity, String.class);
         assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
 
-        // Try deleting ID that doesn't exist
-        response = restTemplate.exchange(
+    @Test
+    public void testDeleteNonExistingCinema() {
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+        // Try deleting Cinema with ID that doesn't exist
+        ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/cinemas/555"), HttpMethod.DELETE, entity, String.class);
-        assertTrue(response.getStatusCode().is5xxServerError());
+        assertTrue(response.getStatusCode().is4xxClientError());
     }
 
     private String createURLWithPort(String url) {

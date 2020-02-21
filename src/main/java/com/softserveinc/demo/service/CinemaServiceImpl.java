@@ -4,6 +4,7 @@ import com.softserveinc.demo.exception.EntityNotFoundException;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.repository.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,10 @@ public class CinemaServiceImpl implements CinemaService{
 
     @Override
     public void deleteById(Long id) {
-       cinemaRepository.deleteById(id);
+        try {
+            cinemaRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Cinema not found with id: " + id);
+        }
     }
 }
