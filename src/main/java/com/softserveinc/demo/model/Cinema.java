@@ -1,6 +1,7 @@
 package com.softserveinc.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Cinema {
     private long id;
     private String name;
     private boolean isOpen;
+    @Min(1)
     private int halls;
     private String address;
 
