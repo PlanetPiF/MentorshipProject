@@ -33,7 +33,7 @@ public class CinemaControllerIntegrationTest {
         ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/cinemas/5"), HttpMethod.GET, entity, String.class);
         String cinema5 = "{ \"id\": 5, \"name\": \"Arena\", \"halls\": 20," +
-                " \"address\": \"Address5\", \"movies\": [], \"open\": true }";
+                " \"address\": \"Address5\", \"movies\": [], \"isOpen\": true }";
         String result = response.getBody();
 
         JSONAssert.assertEquals(cinema5, result, false);
