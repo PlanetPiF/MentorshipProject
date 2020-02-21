@@ -78,16 +78,9 @@ public class CinemaControllerIntegrationTest {
         ResponseEntity<String> putResponse = restTemplate.exchange(
                 createURLWithPort("/cinemas/4"), HttpMethod.PUT, entity, String.class);
         assertTrue(putResponse.toString().startsWith("<200"));
-        String putResult = putResponse.toString();
 
-        //Try to GET the cinema back
-        ResponseEntity<String> getResponse = restTemplate.exchange(
-                createURLWithPort("/cinemas/4"), HttpMethod.GET, entity, String.class);
-        assertTrue(getResponse.toString().startsWith("<200"));
-
-        // Compare the new Cinema with the GET response
-        Cinema cinemaFromResponse = new Gson().fromJson(getResponse.getBody(), Cinema.class);
-
+        // Compare the original cinema with the reponse
+        Cinema cinemaFromResponse = new Gson().fromJson(putResponse.getBody(), Cinema.class);
         assertEquals(newCinema.getId(), cinemaFromResponse.getId());
         assertEquals(newCinema.getName(), cinemaFromResponse.getName());
         assertEquals(newCinema.getAddress(), cinemaFromResponse.getAddress());
