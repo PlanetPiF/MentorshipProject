@@ -45,11 +45,11 @@ public class Cinema {
         this.name = name;
     }
 
-    public boolean isOpen() {
+    public boolean getIsOpen() {
         return isOpen;
-    }
+    } //helps with JSON conversion
 
-    public void setOpen(boolean open) {
+    public void setIsOpen(boolean open) {
         isOpen = open;
     }
 

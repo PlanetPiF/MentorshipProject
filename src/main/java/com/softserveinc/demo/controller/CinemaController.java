@@ -69,8 +69,10 @@ public class CinemaController {
     Cinema updateCinema(@RequestBody Cinema newCinema, @PathVariable Long id) {
         return cinemaService.findById(id).map(cinema -> {
             cinema.setName(newCinema.getName());
-            cinema.setOpen(newCinema.isOpen());
+            cinema.setIsOpen(newCinema.getIsOpen());
             cinema.setMovies(newCinema.getMovies());
+            cinema.setAddress(newCinema.getAddress());
+            cinema.setHalls(newCinema.getHalls());
             return cinemaService.save(cinema);
         }).orElseGet(() -> {
             newCinema.setId(id);
