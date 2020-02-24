@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -79,15 +82,16 @@ public class CinemaControllerTest {
         cinemasList.add(cinema1);
         cinemasList.add(cinema2);
 
-        when(cinemaService.findAllCinemas()).thenReturn(cinemasList);
+        PageImpl<Cinema> pagedResponse = new PageImpl<>(cinemasList);
+        Mockito.when(cinemaService.findAll(any(PageRequest.class))).thenReturn(pagedResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/cinemas")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(2)))
-                .andExpect(jsonPath("$.[0].name", is("Arena")))
-                .andExpect(jsonPath("$.[0].movies[0].title", is("Lord of the Rings")))
-                .andExpect(jsonPath("$.[1].name", is("IMAX")))
+                .andExpect(jsonPath("$.content.*", hasSize(2)))
+                .andExpect(jsonPath("$.content.[0].name", is("Arena")))
+                .andExpect(jsonPath("$.content.[0].movies[0].title", is("Lord of the Rings")))
+                .andExpect(jsonPath("$.content.[1].name", is("IMAX")))
                 .andReturn();
     }
 

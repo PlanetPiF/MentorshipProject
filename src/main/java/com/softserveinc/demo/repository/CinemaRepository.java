@@ -6,12 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Long> {
 
-    List<Cinema> findAllByNameOrHallsOrIsOpenOrMovies_Id(String name, Integer halls, Boolean isOpen, Long id, Pageable pageable);
-
+    Page<Cinema> findAllByNameOrHallsOrIsOpenOrMovies_Id(String name, Integer halls, Boolean isOpen, Long id, Pageable pageable);
+    Page<Cinema> findAllByNameOrHallsOrIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
+    Page<Cinema> findAll(Pageable pageable);
 }
