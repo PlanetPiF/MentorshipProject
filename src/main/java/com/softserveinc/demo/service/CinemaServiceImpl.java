@@ -5,10 +5,10 @@ import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.repository.CinemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,17 +34,18 @@ public class CinemaServiceImpl implements CinemaService{
     }
 
     @Override
-    public List<Cinema> findAllCinemas() {
-        return (List<Cinema>) cinemaRepository.findAll();
+    public Page<Cinema> findAll(Pageable pageable) {
+        return cinemaRepository.findAll(pageable);
     }
 
+
     @Override
-    public List<Cinema> findCinemasBy(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
+    public Page<Cinema> findCinemasBy(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
         if(movieId == null) {
             return cinemaRepository.findAllByNameOrHallsOrIsOpen(name, halls, isOpen, pageable);
-        } else {
-            return cinemaRepository.findAllByNameOrHallsOrIsOpenOrMovies_Id(name, halls, isOpen, movieId, pageable);
         }
+
+        return cinemaRepository.findAllByNameOrHallsOrIsOpenOrMovies_Id(name, halls, isOpen, movieId, pageable);
     }
 
     @Override

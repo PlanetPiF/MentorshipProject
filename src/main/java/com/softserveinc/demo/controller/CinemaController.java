@@ -3,6 +3,7 @@ package com.softserveinc.demo.controller;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.service.CinemaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -23,18 +24,18 @@ public class CinemaController {
     }
 
     @GetMapping(value = "/cinemas", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Cinema> getCinemas(@RequestParam(name = "name", required = false) String name,
+    public Page<Cinema> getCinemas(@RequestParam(name = "name", required = false) String name,
                                    @RequestParam(name = "isOpen", required = false) Boolean isOpen,
                                    @RequestParam(name = "movieId", required = false) Long movieId,
                                    @RequestParam(name = "halls", required = false) Integer halls,
                                    @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
-                                   @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+                                   @RequestParam(name = "size", required = false, defaultValue = "100") Integer size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
         // Return all movies if there are no filters
         if (name == null && isOpen == null && movieId == null && halls == null) {
-            return cinemaService.findAllCinemas();
+            return cinemaService.findAll(pageable);
         }
 
         return cinemaService.findCinemasBy(name,halls,isOpen,movieId,pageable);

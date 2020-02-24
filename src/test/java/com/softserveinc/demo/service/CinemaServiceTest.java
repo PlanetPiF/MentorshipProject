@@ -6,9 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +37,14 @@ public class CinemaServiceTest {
 
     @Test
     public void testFindAll() {
-        List<Cinema> cinemaList = new ArrayList<>();
-        when(cinemaRepository.findAll()).thenReturn(cinemaList);
+        List<Cinema> cinemas = new ArrayList<>();
+        PageImpl<Cinema> pagedResponse = new PageImpl<>(cinemas);
+        Mockito.when(cinemaRepository.findAll(any(PageRequest.class))).thenReturn(pagedResponse);
 
-        List<Cinema> result = cinemaService.findAllCinemas();
+        Page<Cinema> result = cinemaService.findAll(PageRequest.of(0, 10));
 
-        verify(cinemaRepository, only()).findAll();
-        assertEquals(cinemaList, result);
+        verify(cinemaRepository, times(1)).findAll(any(PageRequest.class));
+        assertEquals(pagedResponse, result);
     }
 
     @Test
