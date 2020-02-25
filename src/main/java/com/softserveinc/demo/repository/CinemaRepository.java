@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Long> {
 
-    Page<Cinema> findAllByNameOrHallsOrIsOpenOrMovies_Id(String name, Integer halls, Boolean isOpen, Long id, Pageable pageable);
-    Page<Cinema> findAllByNameOrHallsOrIsOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
+    Page<Cinema> findAllByNameOrHallsOrOpenOrMovies_Id(String name, Integer halls, Boolean isOpen, Long id, Pageable pageable);
+    Page<Cinema> findAllByNameOrHallsOrOpen(String name, Integer halls, Boolean isOpen, Pageable pageable);
     Page<Cinema> findAll(Pageable pageable);
 }

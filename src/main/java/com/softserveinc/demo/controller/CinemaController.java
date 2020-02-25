@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
 
 @RestController
 public class CinemaController {
@@ -25,7 +24,7 @@ public class CinemaController {
 
     @GetMapping(value = "/cinemas", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Cinema> getCinemas(@RequestParam(name = "name", required = false) String name,
-                                   @RequestParam(name = "isOpen", required = false) Boolean isOpen,
+                                   @RequestParam(name = "open", required = false) Boolean open,
                                    @RequestParam(name = "movieId", required = false) Long movieId,
                                    @RequestParam(name = "halls", required = false) Integer halls,
                                    @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -34,11 +33,11 @@ public class CinemaController {
         Pageable pageable = PageRequest.of(page, size);
 
         // Return all movies if there are no filters
-        if (name == null && isOpen == null && movieId == null && halls == null) {
+        if (name == null && open == null && movieId == null && halls == null) {
             return cinemaService.findAll(pageable);
         }
 
-        return cinemaService.findCinemasBy(name,halls,isOpen,movieId,pageable);
+        return cinemaService.findCinemasBy(name,halls,open,movieId,pageable);
     }
 
     @GetMapping(value = "/cinemas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,7 +62,7 @@ public class CinemaController {
     Cinema updateCinema(@RequestBody Cinema newCinema, @PathVariable Long id) {
         return cinemaService.findById(id).map(cinema -> {
             cinema.setName(newCinema.getName());
-            cinema.setIsOpen(newCinema.getIsOpen());
+            cinema.setOpen(newCinema.isOpen());
             cinema.setMovies(newCinema.getMovies());
             cinema.setAddress(newCinema.getAddress());
             cinema.setHalls(newCinema.getHalls());

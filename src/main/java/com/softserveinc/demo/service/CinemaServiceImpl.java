@@ -42,10 +42,10 @@ public class CinemaServiceImpl implements CinemaService{
     @Override
     public Page<Cinema> findCinemasBy(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
         if(movieId == null) {
-            return cinemaRepository.findAllByNameOrHallsOrIsOpen(name, halls, isOpen, pageable);
+            return cinemaRepository.findAllByNameOrHallsOrOpen(name, halls, isOpen, pageable);
         }
 
-        return cinemaRepository.findAllByNameOrHallsOrIsOpenOrMovies_Id(name, halls, isOpen, movieId, pageable);
+        return cinemaRepository.findAllByNameOrHallsOrOpenOrMovies_Id(name, halls, isOpen, movieId, pageable);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class CinemaControllerIntegrationTest {
         ResponseEntity<String> response = restTemplate.exchange(
                 createURLWithPort("/cinemas/5"), HttpMethod.GET, entity, String.class);
         String cinema5 = "{ \"id\": 5, \"name\": \"Arena\", \"halls\": 20," +
-                " \"address\": \"Address5\", \"movies\": [], \"isOpen\": true }";
+                " \"address\": \"Address5\", \"movies\": [], \"open\": true }";
         String result = response.getBody();
 
         JSONAssert.assertEquals(cinema5, result, false);
@@ -55,7 +55,7 @@ public class CinemaControllerIntegrationTest {
 
         assertEquals(newCinema.getName(), cinemaFromResponse.getName());
         assertEquals(newCinema.getAddress(), cinemaFromResponse.getAddress());
-        assertEquals(newCinema.getIsOpen(), cinemaFromResponse.getIsOpen());
+        assertEquals(newCinema.isOpen(), cinemaFromResponse.isOpen());
         assertEquals(newCinema.getHalls(), cinemaFromResponse.getHalls());
         assertEquals(newCinema.getMovies().size(), cinemaFromResponse.getMovies().size());
     }
@@ -84,7 +84,7 @@ public class CinemaControllerIntegrationTest {
         assertEquals(newCinema.getId(), cinemaFromResponse.getId());
         assertEquals(newCinema.getName(), cinemaFromResponse.getName());
         assertEquals(newCinema.getAddress(), cinemaFromResponse.getAddress());
-        assertEquals(newCinema.getIsOpen(), cinemaFromResponse.getIsOpen());
+        assertEquals(newCinema.isOpen(), cinemaFromResponse.isOpen());
         assertEquals(newCinema.getHalls(), cinemaFromResponse.getHalls());
         assertEquals(newCinema.getMovies().size(), cinemaFromResponse.getMovies().size());
     }

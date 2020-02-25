@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-//@SpringBootTest  //also works with this annotation
+
 @ExtendWith(MockitoExtension.class)
 public class CinemaServiceTest {
 
