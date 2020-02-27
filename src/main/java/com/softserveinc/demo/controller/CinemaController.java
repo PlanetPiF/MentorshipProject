@@ -37,7 +37,7 @@ public class CinemaController {
             return cinemaService.findAll(pageable);
         }
 
-        return cinemaService.findCinemasBy(name,halls,open,movieId,pageable);
+        return cinemaService.findCinemasBy(name, halls, open, movieId, pageable);
     }
 
     @GetMapping(value = "/cinemas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

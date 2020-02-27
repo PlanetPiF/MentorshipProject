@@ -3,18 +3,20 @@ package com.softserveinc.demo.controller;
 import com.google.gson.Gson;
 import com.softserveinc.demo.model.Cinema;
 import com.softserveinc.demo.model.Movie;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,6 +28,45 @@ public class CinemaControllerIntegrationTest {
     private int port;
     private HttpHeaders headers = new HttpHeaders();
     private TestRestTemplate restTemplate = new TestRestTemplate();
+
+    @Test
+    public void testGetAllCinemas_Open() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/cinemas?open=true"), HttpMethod.GET, entity, String.class);
+
+        Data jsonData = new Gson().fromJson(response.getBody(), Data.class);
+        List<Cinema> resultList = jsonData.getContent();
+
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);
+        Assert.assertTrue(resultList.size() > 1);
+    }
+
+    @Test
+    public void testGetAllClosedCinemas() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/cinemas?open=false"), HttpMethod.GET, entity, String.class);
+
+        Data jsonData = new Gson().fromJson(response.getBody(), Data.class);
+        List<Cinema> resultList = jsonData.getContent();
+
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(resultList.size(), 1);
+    }
+
+    @Test
+    public void testGetAllCinemas() throws Exception {
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                createURLWithPort("/cinemas"), HttpMethod.GET, entity, String.class);
+
+        Data jsonData = new Gson().fromJson(response.getBody(), Data.class);
+        List<Cinema> resultList = jsonData.getContent();
+
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(resultList.size(), 5);
+    }
 
     @Test
     public void testGetCinema() throws Exception {
@@ -90,6 +131,34 @@ public class CinemaControllerIntegrationTest {
     }
 
     @Test
+    public void testPutCinema_NoId() throws JSONException {
+        // Create new Cinema and parse it into JSON
+        Cinema newCinema = new Cinema("PutMeIn",Boolean.TRUE,222,"CinemaStreet");
+
+        Movie newMovie = new Movie("Test of the rings", Boolean.TRUE, 200);
+        newCinema.getMovies().add(newMovie);
+        String JSON = new Gson().toJson(newCinema);
+
+        // Add Request Headers to use JSON
+        headers.add("Content-Type", "application/json");
+        headers.add("Accept","application/json");
+
+        // Update (PUT) the cinema
+        HttpEntity<String> entity = new HttpEntity<String>(JSON, headers);
+        ResponseEntity<String> putResponse = restTemplate.exchange(
+                createURLWithPort("/cinemas/123123"), HttpMethod.PUT, entity, String.class);
+        assertTrue(putResponse.toString().startsWith("<200"));
+
+        // Compare the original cinema with the reponse
+        Cinema cinemaFromResponse = new Gson().fromJson(putResponse.getBody(), Cinema.class);
+        assertEquals(newCinema.getName(), cinemaFromResponse.getName());
+        assertEquals(newCinema.getAddress(), cinemaFromResponse.getAddress());
+        assertEquals(newCinema.isOpen(), cinemaFromResponse.isOpen());
+        assertEquals(newCinema.getHalls(), cinemaFromResponse.getHalls());
+        assertEquals(newCinema.getMovies().size(), cinemaFromResponse.getMovies().size());
+    }
+
+    @Test
     public void testDeleteExistingCinema() {
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
@@ -111,6 +180,12 @@ public class CinemaControllerIntegrationTest {
 
     private String createURLWithPort(String url) {
         return "http://localhost:" + port + url;
+    }
+
+    @Getter
+    @Setter
+    class Data {
+        private List<Cinema> content;
     }
 }
 

@@ -1,4 +1,4 @@
-package com.softserveinc.demo.controller;
+package com.softserveinc.demo.misc;
 
 import com.softserveinc.demo.exception.BadRequestException;
 import com.softserveinc.demo.exception.EntityNotFoundException;
