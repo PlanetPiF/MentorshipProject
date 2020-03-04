@@ -38,7 +38,6 @@ public class CinemaServiceImpl implements CinemaService{
         return cinemaRepository.findAll(pageable);
     }
 
-
     @Override
     public Page<Cinema> findCinemasBy(String name, Integer halls, Boolean isOpen, Long movieId, Pageable pageable) {
         if(movieId == null) {

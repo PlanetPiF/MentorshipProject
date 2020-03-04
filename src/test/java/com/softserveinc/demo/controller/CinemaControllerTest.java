@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -97,6 +98,29 @@ public class CinemaControllerTest {
     }
 
     @Test
+    public void testFindWithFilters() throws Exception {
+        Movie movie1 = new Movie("Lord of the Rings", Boolean.TRUE, 200);
+        movie1.setId(1L);
+        Cinema cinema1 = new Cinema("Arena", Boolean.TRUE, 10, "Address4");
+        cinema1.getMovies().add(movie1);
+
+        List<Cinema> cinemasList = new ArrayList<>();
+        cinemasList.add(cinema1);
+
+        PageImpl<Cinema> pagedResponse = new PageImpl<>(cinemasList);
+        Mockito.when(cinemaService.findCinemasBy(anyString(),anyInt(),anyBoolean(),anyLong(), any(Pageable.class)))
+                .thenReturn(pagedResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/cinemas?name=\"Arena\"&open=true&halls=10&movieId=1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.*", hasSize(1)))
+                .andExpect(jsonPath("$.content.[0].name", is("Arena")))
+                .andExpect(jsonPath("$.content.[0].movies[0].title", is("Lord of the Rings")))
+                .andReturn();
+    }
+
+    @Test
     public void testPutCinema() throws Exception {
         Cinema cinema = new Cinema("Cinema555", Boolean.TRUE, 10, "Address555");
         cinema.setId(555L);
@@ -120,10 +144,10 @@ public class CinemaControllerTest {
     @Test
     public void testPutCinema_NoId() throws Exception {
         Cinema cinema = new Cinema("Cinema123123", Boolean.TRUE, 10, "Address123123");
-        Optional<Cinema> optionalCinema = Optional.of(cinema);
+        Optional<Cinema> nullOptionalCinema = Optional.empty();
 
-        when(cinemaService.findById(555L)).thenReturn(optionalCinema);
-        when(cinemaService.save(cinema)).thenReturn(cinema);
+        when(cinemaService.findById(555L)).thenReturn(nullOptionalCinema);
+        when(cinemaService.save(any(Cinema.class))).thenReturn(cinema);
 
         Gson gson = new Gson();
         String gsonString = gson.toJson(cinema);
@@ -134,7 +158,7 @@ public class CinemaControllerTest {
                 .andExpect(status().isOk());
 
         verify(cinemaService, times(1)).findById(anyLong());
-        verify(cinemaService, times(1)).save(cinema);
+        verify(cinemaService, times(1)).save(any(Cinema.class));
     }
 
     @Test
